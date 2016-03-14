@@ -1,0 +1,46 @@
+FOR LIBRARY SELECTION AND PIN SETUP:
+
+IMPORTANT: {The PDQ_ST7735_config.h must be added to each project's directory in order for the compiler to find it}
+
+-----------------------------------------------------------------------------
+INCLUDE:
+
+#include <PDQ_GFX.h>      // PDQ: Core graphics library
+#include "PDQ_ST7735_config.h"  // PDQ: ST7735 pins and other setup for this sketch
+#include <PDQ_ST7735.h>     // PDQ: Hardware-specific driver library
+
+PDQ_ST7735 tft;   //create LCD object (using pins in "PDQ_ST7735_config.h")
+
+#define SD_CS     47
+#define DAC_CS     46
+#define TFT_CS     53
+#define TFT_RST    49
+#define TFT_DC     48 //use these for mega2560
+
+REMOVE:
+
+Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS,  TFT_DC, TFT_RST);
+-----------------------------------------------------------------------------
+
+TO INITIALIZE THE DISPLAY:
+-------------------------------------------------------------------
+INCLUDE:
+
+#define ST7735_RST_PIN    49   //use these for mega2560
+
+#if defined(ST7735_RST_PIN)        // reset like Adafruit does 
+  FastPin<ST7735_RST_PIN>::setOutput();
+  FastPin<ST7735_RST_PIN>::hi();
+  FastPin<ST7735_RST_PIN>::lo();
+  delay(1);
+  FastPin<ST7735_RST_PIN>::hi();
+#endif
+
+  tft.begin();            // use instead of tft.initR(INITR_BLACKTAB) to initialize display for PDQ library
+
+REMOVE:
+
+tft.initR(INITR_BLACKTAB);   // initialize a ST7735S chip, black tab
+-------------------------------------------------------------------
+
+The bottom line of the display isn't being redrawn.
